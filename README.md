@@ -23,7 +23,7 @@ activator new play-handson play-scala
 * 実装（コーディング）
     * コントローラー
     * モデル
-    * ふぉーまったー
+    * 簡単なバリデーション
 
 * テスト
-    * TBD
+    * Specificationを使ったテスト
