@@ -1,27 +1,15 @@
 package controllers
 
-import models.{Name, Person}
-import play.api.libs.json.Reads._
+import models.Person
 import play.api.libs.json._
 import play.api.mvc._
-import play.api.libs.functional.syntax._
 
 /**
  * Created by k-urano on 2015/09/04.
  */
 class HandsOnController extends Controller {
 
-  implicit val nameFormatter: Reads[Name] = (
-    (JsPath \ "first").read[String](minLength[String](1)) and
-      (JsPath \ "last").read[String](minLength[String](1))
-    )(Name.apply _)
-
-  implicit val personFormatter: Reads[Person] = (
-    (JsPath \ "name").read[Name] and
-    (JsPath \ "age").read[Int](min(0) keepAnd max(100)) and
-      (JsPath \ "blood").readNullable[String](minLength(1)) and
-      (JsPath \ "mynumber").read[Seq[Int]]
-    )(Person.apply _)
+  import formatters.PersonFormatter._
 
   def normal = Action(BodyParsers.parse.json) { request =>
     val person = request.body.validate[Person]
