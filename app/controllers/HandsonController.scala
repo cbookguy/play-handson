@@ -1,25 +1,15 @@
 package controllers
 
-import models.{Name, Person}
-import play.api.mvc._
+import models.Person
 import play.api.libs.json._
-import play.api.libs.json.Reads._
-import play.api.libs.functional.syntax._
+import play.api.mvc._
 
 /**
  * Created by k-urano on 2015/09/04.
  */
 class HandsOnController extends Controller {
 
-  implicit val nameFormatter: Reads[Name] = (
-    (JsPath \ "first").read[String](minLength[String](1)) and
-      (JsPath \ "last").read[String](minLength[String](1))
-    )(Name.apply _)
-
-  implicit val personFormatter: Reads[Person] = (
-    (JsPath \ "name").read[Name] and
-      (JsPath \ "age").read[Int](min(0) keepAnd max(100))
-    )(Person.apply _)
+  import formatters.PersonFormatter._
 
   def normal = Action(BodyParsers.parse.json) { request =>
     val person = request.body.validate[Person]
@@ -41,6 +31,21 @@ class HandsOnController extends Controller {
       }
       case e: JsError => {
         BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(e)))
+      }
+    }
+  }
+
+  implicit val ageTransform = { age: Int => __.json.update((__ \ "age").json.put(JsNumber(age))) }
+
+  def transform = Action(parse.json) { json =>
+    val personVal = json.body
+    val transVal = personVal.transform(ageTransform(18))
+    personVal.validate[Person] match {
+      case s: JsSuccess[Person] => {
+        Ok(Json.obj("original" -> s.get, "transform" -> Json.toJson(transVal.get)))
+      }
+      case e: JsError => {
+        BadRequest(Json.obj("message" -> JsError.toJson(e)))
       }
     }
   }

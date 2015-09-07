@@ -11,5 +11,6 @@ GET         /assets/*file        controllers.Assets.versioned(path="/public", fi
 
 
 # Hands On
-POST        /v1/normal              controllers.HandsOnController.normal
-POST        /v2/normal              controllers.HandsOnController.normal2
+POST        /v1/normal           controllers.HandsOnController.normal
+POST        /v2/normal           controllers.HandsOnController.normal2
+POST        /v1/transform             controllers.HandsOnController.transform
