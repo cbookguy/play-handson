@@ -35,4 +35,19 @@ class HandsOnController extends Controller {
     }
   }
 
+  implicit val ageTransform = { age: Int => __.json.update((__ \ "age").json.put(JsNumber(age))) }
+
+  def transform = Action(parse.json) { json =>
+    val personVal = json.body
+    val transVal = personVal.transform(ageTransform(18))
+    personVal.validate[Person] match {
+      case s: JsSuccess[Person] => {
+        Ok(Json.obj("original" -> s.get, "transform" -> Json.toJson(transVal.get)))
+      }
+      case e: JsError => {
+        BadRequest(Json.obj("message" -> JsError.toJson(e)))
+      }
+    }
+  }
+
 }
