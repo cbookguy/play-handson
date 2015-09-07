@@ -1,9 +1,9 @@
 package controllers
 
 import models.{Name, Person}
-import play.api.mvc._
-import play.api.libs.json._
 import play.api.libs.json.Reads._
+import play.api.libs.json._
+import play.api.mvc._
 import play.api.libs.functional.syntax._
 
 /**
@@ -18,7 +18,9 @@ class HandsOnController extends Controller {
 
   implicit val personFormatter: Reads[Person] = (
     (JsPath \ "name").read[Name] and
-      (JsPath \ "age").read[Int](min(0) keepAnd max(100))
+    (JsPath \ "age").read[Int](min(0) keepAnd max(100)) and
+      (JsPath \ "blood").readNullable[String](minLength(1)) and
+      (JsPath \ "mynumber").read[Seq[Int]]
     )(Person.apply _)
 
   def normal = Action(BodyParsers.parse.json) { request =>
