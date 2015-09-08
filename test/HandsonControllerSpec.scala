@@ -7,9 +7,6 @@ import play.api.libs.json.{JsNumber, JsDefined, Json}
 import play.api.test.Helpers._
 import play.api.test._
 
-/**
- * Created by k-urano on 2015/09/04.
- */
 @RunWith(classOf[JUnitRunner])
 class HandsonControllerSpec extends Specification with BeforeEach {
 

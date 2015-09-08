@@ -5,9 +5,6 @@ import play.api.libs.json.Reads._
 import play.api.libs.json.{Format, JsPath, Reads}
 import play.api.libs.functional.syntax._
 
-/**
- * Created by k-urano on 2015/09/07.
- */
 object PersonFormatter {
 
   implicit val nameFormatter: Format[Name] = (

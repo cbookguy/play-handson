@@ -4,9 +4,6 @@ import models.Person
 import play.api.libs.json._
 import play.api.mvc._
 
-/**
- * Created by k-urano on 2015/09/04.
- */
 class HandsOnController extends Controller {
 
   import formatters.PersonFormatter._
