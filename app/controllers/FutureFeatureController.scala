@@ -32,11 +32,11 @@ class FutureFeatureController extends Controller {
     }
   }
 
-  def getName(r: WSResponse): List[JsValue] = {
+  private def getName(r: WSResponse): List[JsValue] = {
     (JsPath \ "name")(r.json)
   }
 
-  def getInfo(f: Future[WSResponse]): WSResponse = {
+  private def getInfo(f: Future[WSResponse]): WSResponse = {
     Await.result(f, scala.concurrent.duration.Duration(1000, TimeUnit.MILLISECONDS))
   }
 
